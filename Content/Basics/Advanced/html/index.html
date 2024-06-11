@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script type="text/javascript">
+		class EventManager  {
+		  constructor() {
+		    this.queue = [];
+		    this.currentID = 0;
+		  }
+		  send(cmd, data, callback) {
+		  	this.queue.push({
+		  		id: this.currentID,
+		  		callback: callback
+		  	})
+
+		  	console.log(`cmd:${cmd}:${this.currentID},${data}`)
+		  	this.currentID = this.currentID+1;
+		  }
+		  receive(id, data){
+		  	this.queue = this.queue.filter((event) => {
+		  		if(event.id === id && event.callback){
+		  			event.callback(data, id)
+		  			return false;
+		  		}
+    			return true;
+			})
+		  }
+		}
+		const eventManager = new EventManager();
+
+		function sendEvent() {
+			eventManager.send("eventJS", "Hello Unreal from Javascript", (data) => alert(data))
+		}
+		function receiveEvent(id, data) {
+			eventManager.receive(id, data)
+		}
+		function sendEventFromUnreal(id, data) {
+			alert("Hello Javascript from Unreal")
+			eventManager.send("eventUnreal", `${id},${data}`, (data) => console.log(`cmd:eventReceive:${data}`))
+		}
+	</script>
+</head>
+<body>
+
+<h1>JS Event </h1>
+
+<div>
+	<button type="button" id="moveBtn" onclick="sendEvent()">Send Event From JS</button>
+</div>
+<div id="result">
+</div>
+</body>
+</html>
