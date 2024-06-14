@@ -28,14 +28,14 @@
 		}
 		const eventManager = new EventManager();
 
-		function sendEvent() {
+		function sendEventFromJS() {
 			eventManager.send("eventJS", "Hello Unreal from Javascript", (data) => alert(data))
 		}
 		function receiveEvent(id, data) {
 			eventManager.receive(id, data)
 		}
 		function sendEventFromUnreal(id, data) {
-			alert("Hello Javascript from Unreal")
+			alert(data)
 			eventManager.send("eventUnreal", `${id},${data}`, (data) => console.log(`cmd:eventReceive:${data}`))
 		}
 	</script>
@@ -45,7 +45,7 @@
 <h1>JS Event </h1>
 
 <div>
-	<button type="button" id="moveBtn" onclick="sendEvent()">Send Event From JS</button>
+	<button type="button" id="moveBtn" onclick="sendEventFromJS()">Send Event From JS</button>
 </div>
 <div id="result">
 </div>
